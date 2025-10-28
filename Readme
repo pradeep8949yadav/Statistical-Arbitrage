@@ -1,39 +1,91 @@
-<h1 align="center">📊 Statistical Arbitrage — Cointegration-Based Pairs Trading Strategy</h1>
+# Statistical-Arbitrage---Cointegration-Based-Pairs-Trading-Strategy  
 
-<p align="center">
-  <strong>Self Project — Quantitative Trading | 2025</strong><br>
-  <em>Mean-Reversion Strategy using Engle–Granger Cointegration Test on AMZN–GOOG</em>
-</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Language-Python-blue?logo=python">
-  <img src="https://img.shields.io/badge/Focus-Quantitative%20Finance-brightgreen">
-  <img src="https://img.shields.io/badge/Status-Completed-success">
-</p>
+**"Developed a mean-reversion pairs trading model using Engle–Granger Cointegration Test on AMZN–GOOG to detect equilibrium relationships and generate Z-score driven entry/exit signals."**
 
 ---
 
-## 🧠 Overview  
+##  Dataset  
+import kagglehub
 
-This project develops a **statistical arbitrage trading model** leveraging **cointegration-based mean reversion**.  
-The strategy analyzes long-term equilibrium relationships between **Amazon (AMZN)** and **Google (GOOG)** to capture temporary price divergences for profitable opportunities.  
+# Download latest version
+path = kagglehub.dataset_download("borismarjanovic/price-volume-data-for-all-us-stocks-etfs")
 
-Key highlights:  
-- ✅ **Engle–Granger Cointegration Test** for long-run equilibrium  
-- ✅ **Hedge Ratio (β = 1.6161)** estimation via OLS regression  
-- ✅ **Z-score driven entry/exit signals**  
-- ✅ **Rolling-window backtesting** and **regime stability testing**  
+print("Path to dataset files:", path) 
 
 ---
 
-## ⚙️ Methodology  
+##  Overview  
 
-### 1️⃣ Data Collection  
-- Historical daily price data for **AMZN** and **GOOG** retrieved using `yfinance`.  
-- Cleaned, aligned, and truncated for matching trading days.
+**Statistical Arbitrage** is a quantitative trading strategy that identifies mispricings between related assets.  
+This project implements a **cointegration-based mean reversion model** using **Amazon (AMZN)** and **Google (GOOG)** stock data to detect long-term relationships and exploit short-term deviations for profitable opportunities.  
 
-```python
-import yfinance as yf
+---
 
-data = yf.download(['AMZN', 'GOOG'], start='2015-01-01', end='2025-01-01')['Adj Close']
-data = data.dropna()
+### ⚙️ **Methodology**  
+
+#### 1️⃣ **Data Collection**  
+- Historical daily price data for **AMZN** and **GOOG** were fetched using `yfinance`.  
+- Data was preprocessed, cleaned, and aligned for identical time windows.  
+
+#### 2️⃣ **Cointegration Testing (Engle–Granger Two-Step Method)**  
+- **Step 1:** Regression of AMZN on GOOG to estimate hedge ratio (β).  
+- **Step 2:** Apply Augmented Dickey-Fuller (ADF) test on residuals to confirm stationarity.  
+- **Result:** p-value = **0.0297** → Reject null hypothesis → Series are cointegrated.  
+
+#### 3️⃣ **Signal Generation**  
+- Compute the **spread**:  
+  \[
+  \text{Spread}_t = \text{AMZN}_t - β \times \text{GOOG}_t
+  \]  
+- Compute rolling **mean (μ)** and **standard deviation (σ)**.  
+- Define **Z-score**:  
+  \[
+  Z_t = \frac{\text{Spread}_t - μ_t}{σ_t}
+  \]  
+
+**Trading Logic:**  
+- **Go Long** when Z < -1  
+- **Go Short** when Z > +1  
+- **Exit** when |Z| < 0.25  
+
+#### 4️ **Backtesting**  
+- Implemented rolling-window backtesting to ensure realistic strategy evaluation.  
+- Assessed **cumulative returns**, **Sharpe ratio**, and **win rate**.  
+- Conducted **regime stability analysis** across market phases.  
+
+---
+
+## Results  
+
+- Strong long-term equilibrium between AMZN and GOOG.  
+- Cointegration confirmed with **p = 0.0297**.  
+- Optimal hedge ratio: **β = 1.6161**.  
+- Stable returns achieved via mean reversion during backtesting.  
+
+---
+
+## Tech Stack  
+
+- **Language:** Python  
+- **Libraries:** `pandas`, `numpy`, `statsmodels`, `matplotlib`, `yfinance`, `scipy`  
+- **Environment:** Jupyter Notebook / VS Code  
+
+---
+
+##  Key Learnings  
+
+- Applied econometric techniques to implement **statistical arbitrage**.  
+- Understood **mean reversion dynamics** in financial time series.  
+- Designed a **backtesting and stability analysis** framework for quantitative models.  
+
+---
+
+## Future Work  
+
+- Extend to **multi-pair portfolio optimization**.  
+- Integrate **transaction cost modeling**.  
+- Compare with **Kalman Filter** and **ML-based adaptive hedge ratio** approaches.  
+
+---
+
+ 
