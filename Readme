@@ -1,91 +1,13 @@
-# Statistical-Arbitrage---Cointegration-Based-Pairs-Trading-Strategy  
+# 📊 Statistical-Arbitrage---Cointegration-Based-Pairs-Trading-Strategy  
 
-**"Developed a mean-reversion pairs trading model using Engle–Granger Cointegration Test on AMZN–GOOG to detect equilibrium relationships and generate Z-score driven entry/exit signals."**
+**Developed a mean-reversion pairs trading model using Engle–Granger Cointegration Test on AMZN–GOOG to detect equilibrium relationships and generate Z-score driven entry/exit signals.**
 
 ---
 
-##  Dataset  
+## 📁 Dataset  
+```python
 import kagglehub
 
 # Download latest version
 path = kagglehub.dataset_download("borismarjanovic/price-volume-data-for-all-us-stocks-etfs")
-
-print("Path to dataset files:", path) 
-
----
-
-##  Overview  
-
-**Statistical Arbitrage** is a quantitative trading strategy that identifies mispricings between related assets.  
-This project implements a **cointegration-based mean reversion model** using **Amazon (AMZN)** and **Google (GOOG)** stock data to detect long-term relationships and exploit short-term deviations for profitable opportunities.  
-
----
-
-### ⚙️ **Methodology**  
-
-#### 1️⃣ **Data Collection**  
-- Historical daily price data for **AMZN** and **GOOG** were fetched using `yfinance`.  
-- Data was preprocessed, cleaned, and aligned for identical time windows.  
-
-#### 2️⃣ **Cointegration Testing (Engle–Granger Two-Step Method)**  
-- **Step 1:** Regression of AMZN on GOOG to estimate hedge ratio (β).  
-- **Step 2:** Apply Augmented Dickey-Fuller (ADF) test on residuals to confirm stationarity.  
-- **Result:** p-value = **0.0297** → Reject null hypothesis → Series are cointegrated.  
-
-#### 3️⃣ **Signal Generation**  
-- Compute the **spread**:  
-  \[
-  \text{Spread}_t = \text{AMZN}_t - β \times \text{GOOG}_t
-  \]  
-- Compute rolling **mean (μ)** and **standard deviation (σ)**.  
-- Define **Z-score**:  
-  \[
-  Z_t = \frac{\text{Spread}_t - μ_t}{σ_t}
-  \]  
-
-**Trading Logic:**  
-- **Go Long** when Z < -1  
-- **Go Short** when Z > +1  
-- **Exit** when |Z| < 0.25  
-
-#### 4️ **Backtesting**  
-- Implemented rolling-window backtesting to ensure realistic strategy evaluation.  
-- Assessed **cumulative returns**, **Sharpe ratio**, and **win rate**.  
-- Conducted **regime stability analysis** across market phases.  
-
----
-
-## Results  
-
-- Strong long-term equilibrium between AMZN and GOOG.  
-- Cointegration confirmed with **p = 0.0297**.  
-- Optimal hedge ratio: **β = 1.6161**.  
-- Stable returns achieved via mean reversion during backtesting.  
-
----
-
-## Tech Stack  
-
-- **Language:** Python  
-- **Libraries:** `pandas`, `numpy`, `statsmodels`, `matplotlib`, `yfinance`, `scipy`  
-- **Environment:** Jupyter Notebook / VS Code  
-
----
-
-##  Key Learnings  
-
-- Applied econometric techniques to implement **statistical arbitrage**.  
-- Understood **mean reversion dynamics** in financial time series.  
-- Designed a **backtesting and stability analysis** framework for quantitative models.  
-
----
-
-## Future Work  
-
-- Extend to **multi-pair portfolio optimization**.  
-- Integrate **transaction cost modeling**.  
-- Compare with **Kalman Filter** and **ML-based adaptive hedge ratio** approaches.  
-
----
-
- 
+print("Path to dataset files:", path)
